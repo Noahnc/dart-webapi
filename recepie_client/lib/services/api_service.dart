@@ -29,16 +29,21 @@ class ApiService {
     }
   }
 
-  Future<List<Recipe>> getAllRecipes(int id) async {
+  Future<List<Recipe>> getAllRecipes() async {
+    log('getAllRecipes');
     var response = await http.get(Uri.parse("$_url/recipe"));
     if (response.statusCode != 200) {
-      throw Exception("Could not load recipe with id $id");
+      log('error');
+      throw Exception("Could not load recipes");
     }
 
+    log('success');
     List<dynamic> parsedJson = jsonDecode(response.body);
     List<Recipe> recipes = [];
 
+
     for (var j in parsedJson) {
+      log('add recipe');
       recipes.add(Recipe.fromJson(j));
     }
 

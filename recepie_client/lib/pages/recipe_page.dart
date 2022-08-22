@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:recepie_client/model/recipe.dart';
 import 'package:recepie_client/services/api_service.dart';
-
-final recipe1 = Recipe(1, "rezept1", 1, 1, "Apfel");
-final recipe2 = Recipe(2, "rezept2", 2, 2, "Banane");
-final recipe3 = Recipe(3, "rezept3", 3, 3, "Zitrone");
-
-final array = [recipe1, recipe2, recipe3];
-
-final components = ["Pizzateig", "Tomatensauce", "Burrata", "frischer Basilikum", "Gewürze"];
+import 'package:recepie_client/pages/recipe_detail.dart';
 
 class RecipePage extends StatefulWidget {
   const RecipePage({Key? key, required this.title}) : super(key: key);
@@ -36,23 +29,29 @@ class _RecipePageState extends State<RecipePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        child: ListView.builder(
-            padding: const EdgeInsets.only(top: 5, right: 5, left: 5),
-            itemCount: array.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                margin: const EdgeInsets.all(5),
-                padding: const EdgeInsets.all(10),
-                height: 50,
-                color: Colors.black12,
-                child: Center(
-                    child: Row(
+      body: FutureBuilder<List<Recipe>>(
+          initialData: const [],
+          future: ApiService.instance.getAllRecipes(),
+          builder: (context, snapshot) {
+            if(!snapshot.hasData)
+              return Text("Loading");
+
+            return ListView.builder(
+                padding: const EdgeInsets.only(top: 5, right: 5, left: 5),
+                itemCount: snapshot.data?.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    margin: const EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(10),
+                    height: 50,
+                    color: Colors.black12,
+                    child: Center(
+                        child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         FittedBox(
                           fit: BoxFit.fitWidth,
-                          child: Text(array[index].name),
+                          child: Text(snapshot.data![index].name),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -61,7 +60,13 @@ class _RecipePageState extends State<RecipePage> {
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => RecipeDetailPage(name: array[index].name, components: components,)),
+                                  MaterialPageRoute(
+                                      builder: (context) => RecipeDetailPage(
+                                            name: snapshot.data![index].name,
+                                            components: snapshot
+                                                .data![index].ingredients
+                                                .split(","),
+                                          )),
                                 );
                               },
                               child: const Text('Rezept öffnen'),
@@ -77,9 +82,9 @@ class _RecipePageState extends State<RecipePage> {
                         )
                       ],
                     )),
-              );
-            }),
-      ),
+                  );
+                });
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
