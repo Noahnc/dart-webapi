@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:recepie_client/model/recipe.dart';
+import 'package:recepie_client/pages/recipe_detail.dart';
 
-final recipe1 = Recipe(1, "rezept1", 1, 1);
+final recipe1 = Recipe(1, "Pizza Burrata", 1, 1);
 final recipe2 = Recipe(2, "rezept2", 2, 2);
 final recipe3 = Recipe(3, "rezept3", 3, 3);
 
 final array = [recipe1, recipe2, recipe3];
+
+final components = ["Pizzateig", "Tomatensauce", "Burrata", "frischer Basilikum", "Gewürze"];
 
 class RecipePage extends StatefulWidget {
   const RecipePage({Key? key, required this.title}) : super(key: key);
@@ -56,7 +59,10 @@ class _RecipePageState extends State<RecipePage> {
                           children: [
                             ElevatedButton(
                               onPressed: () {
-                                // TODO: open RecipeDetail
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => RecipeDetailPage(name: array[index].name, components: components,)),
+                                );
                               },
                               child: const Text('Rezept öffnen'),
                             ),
