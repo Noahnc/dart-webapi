@@ -34,7 +34,7 @@ class DBHandler {
 
     var rs = _db.select('SELECT * from recipes');
     for (final Row row in rs) {
-      recipes.add(Recipe(row['id'], row['name'], row['time'], row['marked']));
+      recipes.add(Recipe(row['id'], row['name'], row['time'], row['marked'], row['ingredients']));
     }
 
     return recipes;
@@ -43,7 +43,7 @@ class DBHandler {
   Recipe getById(int id) {
     try {
       var rs = _db.select('SELECT * from recipes where id = ?', [id]).first;
-      return Recipe(rs['id'], rs['name'], rs['time'], rs['marked']);
+      return Recipe(rs['id'], rs['name'], rs['time'], rs['marked'], rs['marked']);
     } catch (ex) {
       print(ex);
       throw Exception('Recipe with id $id not found');
@@ -65,10 +65,10 @@ class DBHandler {
 
   create(Recipe recipe) {
     var stmt = _db
-        .prepare('INSERT INTO recipes (name, time, marked) VALUES (?, ?, ?)');
+        .prepare('INSERT INTO recipes (name, time, marked, ingredients) VALUES (?, ?, ?, ?)');
 
     try {
-      stmt.execute([recipe.name, recipe.time, recipe.marked]);
+      stmt.execute([recipe.name, recipe.time, recipe.marked, recipe.ingredients]);
       print('Recipe added to database');
     } catch (ex) {
       print(ex.toString());

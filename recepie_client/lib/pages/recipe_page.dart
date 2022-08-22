@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:recepie_client/model/recipe.dart';
+import 'package:recepie_client/services/api_service.dart';
 
-final recipe1 = Recipe(1, "rezept1", 1, 1);
-final recipe2 = Recipe(2, "rezept2", 2, 2);
-final recipe3 = Recipe(3, "rezept3", 3, 3);
+final recipe1 = Recipe(1, "rezept1", 1, 1, "Apfel");
+final recipe2 = Recipe(2, "rezept2", 2, 2, "Banane");
+final recipe3 = Recipe(3, "rezept3", 3, 3, "Zitrone");
 
 final array = [recipe1, recipe2, recipe3];
 
@@ -55,8 +56,8 @@ class _RecipePageState extends State<RecipePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             ElevatedButton(
-                              onPressed: () {
-                                // TODO: open RecipeDetail
+                              onPressed: () async {
+                                await ApiService('http://10.0.2.2:8080').addRecipe(recipe1);
                               },
                               child: const Text('Rezept öffnen'),
                             ),
