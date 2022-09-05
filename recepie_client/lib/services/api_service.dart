@@ -4,7 +4,7 @@ import 'package:recepie_client/model/recipe.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static ApiService instance = ApiService('http://10.0.2.2:8080');
+  static ApiService instance = ApiService('http://127.0.0.1:8080');
   
   final String _url;
 
@@ -31,20 +31,27 @@ class ApiService {
 
   Future<List<Recipe>> getAllRecipes() async {
     log('getAllRecipes');
-    var response = await http.get(Uri.parse("$_url/recipe"));
-    if (response.statusCode != 200) {
-      log('error');
-      throw Exception("Could not load recipes");
-    }
 
-    log('success');
-    List<dynamic> parsedJson = jsonDecode(response.body);
     List<Recipe> recipes = [];
 
+    try {
+      var response = await http.get(Uri.parse("$_url/recipe"));
+      if (response.statusCode != 200) {
+        log('error');
+        throw Exception("Could not load recipes");
+      }
 
-    for (var j in parsedJson) {
-      log('add recipe');
-      recipes.add(Recipe.fromJson(j));
+      log('success');
+      List<dynamic> parsedJson = jsonDecode(response.body);
+
+      for (var j in parsedJson) {
+        log('add recipe');
+        recipes.add(Recipe.fromJson(j));
+      }
+    } on Exception catch (e) {
+      print(e); // Only catches an exception of type `Exception`.
+    } catch (e) {
+      print(e); // Catches all types of `Exception` and `Error`.
     }
 
     log('Total ${recipes.length} recipes loaded');
