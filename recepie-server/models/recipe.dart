@@ -3,7 +3,7 @@ class Recipe {
   String name;
   int time;
   int marked;
-  String ingredients;
+  String? ingredients;
 
   Recipe(this.id, this.name, this.time, this.marked, this.ingredients);
 
@@ -18,7 +18,7 @@ class Recipe {
 
   @override
   String toString() {
-    return '{ ${this.id}, ${this.name}, ${this.time}, ${this.marked} }';
+    return '{ ${this.id}, $name, ${this.time}, ${this.marked} }';
   }
 
   Map toJson() => {
