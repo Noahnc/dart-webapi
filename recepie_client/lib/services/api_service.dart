@@ -4,7 +4,7 @@ import 'package:recepie_client/model/recipe.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static ApiService instance = ApiService('http://127.0.0.1:8080');
+  static ApiService instance = ApiService('http://10.0.2.2:8080');
   
   final String _url;
 

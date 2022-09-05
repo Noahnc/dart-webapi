@@ -6,7 +6,7 @@ class RecipeDetailPage extends StatefulWidget {
       : super(key: key);
 
   final String name;
-  final List components;
+  final String? components;
 
   @override
   State<RecipeDetailPage> createState() => _RecipeDetailPageState();
@@ -22,7 +22,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
       body: Center(
         child: ListView.builder(
             padding: const EdgeInsets.only(top: 5, right: 5, left: 5),
-            itemCount: widget.components.length,
+            itemCount: countComponents(widget.components),
             itemBuilder: (BuildContext context, int index) {
               return Container(
                 margin: const EdgeInsets.all(5),
@@ -32,10 +32,18 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                 child: Center(
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [Text(widget.components[index])])),
+                        children: [Text(widget.components!.split(",")[index])])),
               );
             }),
       ),
     );
+  }
+
+  int countComponents(String? components) {
+    if (components == null) {
+      return 0;
+    } else {
+      return components.split(",").length;
+    }
   }
 }
