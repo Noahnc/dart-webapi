@@ -2,16 +2,22 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:recepie_client/model/recipe.dart';
 import 'package:http/http.dart' as http;
+import 'dart:io' show Platform;
 
 class ApiService {
-  static ApiService instance = ApiService('http://10.0.2.2:8080');
-  
-  final String _url;
 
-  ApiService(this._url);
+  static ApiService instance = ApiService();
+
+  String getHost(){
+    if(Platform.isAndroid){
+      return 'http://10.0.2.2:8080';
+    } else {
+      return 'http://127.0.0.1:8080';
+    }
+  }
 
   Future addRecipe(Recipe recipe) async {
-    var response = await http.post(Uri.parse("$_url/recipe"),
+    var response = await http.post(Uri.parse("${getHost()}/recipe"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -23,7 +29,7 @@ class ApiService {
   }
 
   Future deleteRecipeById(int id) async {
-    var response = await http.delete(Uri.parse("$_url/recipe/$id"));
+    var response = await http.delete(Uri.parse("${getHost()}/recipe/$id"));
     if (response.statusCode != 200) {
       throw Exception("Could not create recipe");
     }
@@ -35,7 +41,7 @@ class ApiService {
     List<Recipe> recipes = [];
 
     try {
-      var response = await http.get(Uri.parse("$_url/recipe"));
+      var response = await http.get(Uri.parse("${getHost()}/recipe"));
       if (response.statusCode != 200) {
         log('error');
         throw Exception("Could not load recipes");
@@ -59,7 +65,7 @@ class ApiService {
   }
 
   Future<Recipe> getById(int id) async {
-    var response = await http.get(Uri.parse("$_url/recipe/$id"));
+    var response = await http.get(Uri.parse("${getHost()}()/recipe/$id"));
     if (response.statusCode != 200) {
       throw Exception("Could not load recipe with id $id");
     }
