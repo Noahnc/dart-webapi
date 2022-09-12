@@ -6,9 +6,6 @@ void main() {
   runApp(const MyApp());
 }
 
-const String message = "dasd";
-
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
