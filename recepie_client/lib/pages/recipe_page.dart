@@ -19,11 +19,10 @@ class _RecipePageState extends State<RecipePage> {
   Future<List<Recipe>> future = ApiService.instance.getAllRecipes();
 
   void _incrementCounter() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => const RecipeAddPage()),
-    );
+    Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => const RecipeAddPage()),
+    ).then((value) => setState(() {}));
   }
 
   void updateState() {
