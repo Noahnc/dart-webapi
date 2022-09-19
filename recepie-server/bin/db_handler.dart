@@ -43,7 +43,7 @@ class DBHandler {
   Recipe getById(int id) {
     try {
       var rs = _db.select('SELECT * from recipes where id = ?', [id]).first;
-      return Recipe(rs['id'], rs['name'], rs['marked']);
+      return Recipe(rs['id'], rs['name'], rs['ingredients']);
     } catch (ex) {
       print(ex);
       throw Exception('Recipe with id $id not found');
